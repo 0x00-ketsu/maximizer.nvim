@@ -1,6 +1,8 @@
 local api = vim.api
 local fn = vim.fn
 
+local utils = require('maximizer.utils')
+
 local function is_valid()
   if vim.t.mx_win_settings and vim.tbl_count(vim.t.mx_win_settings) > 0 then
     return true
@@ -29,10 +31,21 @@ local function maximize_off()
   for winnr, options in pairs(vim.t.mx_win_settings) do
     local winnr = tonumber(winnr, 10)
     if fn.win_getid() ~= winnr then
-      for name, value in pairs(options) do
-        api.nvim_win_set_option(winnr, name, value)
+      if api.nvim_win_is_valid(winnr) then
+        for name, value in pairs(options) do
+          api.nvim_win_set_option(winnr, name, value)
+        end
+      else
+        vim.t.mx_win_settings = utils.tbl_remove_key(vim.t.mx_win_settings, tostring(winnr))
       end
     end
+  end
+
+  -- Set signcolumn to `yes` if only one window
+  if vim.tbl_count(vim.t.mx_win_settings) == 1 then
+    local key, _ = next(vim.t.mx_win_settings)
+    local winnr = tonumber(key, 10)
+    api.nvim_win_set_option(winnr, 'signcolumn', 'yes')
   end
 end
 
@@ -57,9 +70,7 @@ M.maximize = function()
 
   local win_settings = {}
   for _, win in ipairs(api.nvim_tabpage_list_wins(0)) do
-    win_settings[tostring(win)] = {
-      signcolumn = api.nvim_win_get_option(win, 'signcolumn')
-    }
+    win_settings[tostring(win)] = {signcolumn = api.nvim_win_get_option(win, 'signcolumn')}
   end
 
   vim.t.mx_win_settings = win_settings
