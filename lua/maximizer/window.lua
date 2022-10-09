@@ -41,9 +41,8 @@ local function maximize_off()
     end
   end
 
-  -- Set signcolumn to `yes` if only one window
-  if vim.tbl_count(vim.t.mx_win_settings) == 1 then
-    local key, _ = next(vim.t.mx_win_settings)
+  -- Restore signcolumn to `yes`
+  for key, _ in pairs(vim.t.mx_win_settings) do
     local winnr = tonumber(key, 10)
     api.nvim_win_set_option(winnr, 'signcolumn', 'yes')
   end
