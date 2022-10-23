@@ -29,7 +29,7 @@ end
 ---@param list table
 ---@param level? integer
 ---@param is_filter? boolean
-M.tbl_print = function(list, level, is_filter)
+M.pretty_print = function(list, level, is_filter)
   if type(list) ~= 'table' then
     print(list)
     return
@@ -50,14 +50,14 @@ M.tbl_print = function(list, level, is_filter)
         local item_str = string.format('%s%s = %s', indent_str .. ' ', tostring(k), tostring(v))
         print(item_str)
         if type(v) == 'table' then
-          M.tbl_print(v, level + 1)
+          M.pretty_print(v, level + 1)
         end
       end
     else
       local item_str = string.format('%s%s = %s', indent_str .. ' ', tostring(k), tostring(v))
       print(item_str)
       if type(v) == 'table' then
-        M.tbl_print(v, level + 1)
+        M.pretty_print(v, level + 1)
       end
     end
   end
