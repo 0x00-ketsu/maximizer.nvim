@@ -29,7 +29,6 @@ local function maximize_off()
     local winnr = tonumber(winnr, 10)
     if api.nvim_win_is_valid(winnr) then
       for name, value in pairs(options) do
-        print(name, value)
         api.nvim_win_set_option(winnr, name, value)
       end
     end
