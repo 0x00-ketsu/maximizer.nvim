@@ -2,6 +2,8 @@
 
 Maximize and restore the current window in Neovim.
 
+[](https://user-images.githubusercontent.com/16932133/197368085-9698c082-d0de-4a75-b6fe-ccb81e7dcd49.mp4) 
+
 ## Installation
 
 [Packer](https://github.com/wbthomason/packer.nvim)
