@@ -12,7 +12,7 @@ end
 local function maximize_on()
   -- Reset option(s) for not maximized window(s)
   -- Except current window
-  local win_options = {signcolumn = 'no'}
+  local win_options = {signcolumn = 'no', relativenumber = false}
   for winnr, _ in pairs(vim.t.mx_win_settings) do
     local winnr = tonumber(winnr, 10)
     if fn.win_getid() ~= winnr then
@@ -57,7 +57,10 @@ M.maximize = function()
   -- Store window options that will be disabled when maximize
   local win_settings = {}
   for _, win in ipairs(api.nvim_tabpage_list_wins(0)) do
-    win_settings[tostring(win)] = {signcolumn = api.nvim_win_get_option(win, 'signcolumn')}
+    win_settings[tostring(win)] = {
+      signcolumn = api.nvim_win_get_option(win, 'signcolumn'),
+      relativenumber = api.nvim_win_get_option(win, 'relativenumber'),
+    }
   end
   vim.t.mx_win_settings = win_settings
 
