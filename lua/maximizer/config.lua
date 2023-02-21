@@ -1,8 +1,6 @@
-local M = {plugin_name = 'Maximizer'}
-M.namespace = vim.api.nvim_create_namespace('Maximizer')
+local M = {plugin_name = 'maximizer.nvim'}
 
-local defaults = {
-}
+local defaults = {}
 
 ---Assign default options
 ---
