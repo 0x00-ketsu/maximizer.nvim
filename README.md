@@ -2,7 +2,7 @@
 
 Maximize and restore the current window in Neovim.
 
-[](https://user-images.githubusercontent.com/16932133/197368085-9698c082-d0de-4a75-b6fe-ccb81e7dcd49.mp4) 
+[](https://user-images.githubusercontent.com/16932133/197368085-9698c082-d0de-4a75-b6fe-ccb81e7dcd49.mp4)
 
 ## Installation
 
@@ -43,7 +43,7 @@ vim.api.nvim_set_keymap('n', 'mr', '<cmd>lua require("maximizer").restore()<CR>'
   Example
 
   ```lua
-  local maximizer_status = vim.t.is_maximized and '   ' or ''
+  local maximizer_status = vim.t.is_maximized and ' 🔍 ' or ''
   ```
 
 ## Inspiration by
