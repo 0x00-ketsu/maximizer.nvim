@@ -6,21 +6,37 @@ Maximize and restore the current window in Neovim.
 
 ## Installation
 
-[Packer](https://github.com/wbthomason/packer.nvim)
+- [Lazy](https://github.com/folke/lazy.nvim)
 
-```lua
--- Lua
-use {
-  "0x00-ketsu/maximizer.nvim",
-  config = function()
-    require("maximizer").setup {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    }
-  end
-}
-```
+  ```lua
+  -- Lua
+  require('lazy').setup({
+    "0x00-ketsu/maximizer.nvim",
+    config = function()
+      require("maximizer").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      },
+    end
+  })
+  ```
+
+- [Packer](https://github.com/wbthomason/packer.nvim)
+
+  ```lua
+  -- Lua
+  use {
+    "0x00-ketsu/maximizer.nvim",
+    config = function()
+      require("maximizer").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
+  ```
 
 ## Setup
 
