@@ -1,6 +1,6 @@
 local M = {}
 
----Table remove by key, retur new table
+---Table remove by key, return new table
 ---
 ---@param list table
 ---@param key any
