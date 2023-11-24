@@ -1,4 +1,4 @@
-local M = {plugin_name = 'maximizer.nvim'}
+local M = { plugin_name = 'maximizer.nvim' }
 
 local defaults = {}
 
@@ -9,6 +9,6 @@ M.setup = function(opts)
   M.opts = vim.tbl_deep_extend('force', {}, defaults, opts or {})
 end
 
-M.setup {}
+M.setup({})
 
 return M

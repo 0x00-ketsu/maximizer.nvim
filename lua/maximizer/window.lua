@@ -12,7 +12,7 @@ end
 local function maximize_on()
   -- Reset option(s) for not maximized window(s)
   -- Except current window
-  local win_options = {signcolumn = 'no', relativenumber = false}
+  local win_options = { signcolumn = 'no', relativenumber = false }
   for winnr, _ in pairs(vim.t.mx_win_settings) do
     local winnr = tonumber(winnr, 10)
     if fn.win_getid() ~= winnr then
@@ -70,7 +70,6 @@ M.maximize = function()
   else
     vim.t.is_maximized = false
   end
-
 end
 
 M.restore = function()
