@@ -1,24 +1,35 @@
-local api = vim.api
-local fn = vim.fn
+---@param state boolean
+local function set_maximized(state)
+  vim.t.is_maximized = state
+end
 
-local function is_valid()
-  if vim.t.mx_win_settings and vim.tbl_count(vim.t.mx_win_settings) > 0 then
-    return true
-  else
-    return false
+---@param win integer
+local function disable_sidebar_features(win)
+  vim.api.nvim_win_set_option(win, 'number', false)
+  vim.api.nvim_win_set_option(win, 'relativenumber', false)
+  vim.api.nvim_win_set_option(win, 'signcolumn', 'no')
+end
+
+---@return table
+local function get_window_settings()
+  local win_settings = {}
+  local wins = vim.api.nvim_tabpage_list_wins(0)
+  for _, win in ipairs(wins) do
+    win_settings[tostring(win)] = {
+      signcolumn = vim.api.nvim_win_get_option(win, 'signcolumn'),
+      number = vim.api.nvim_win_get_option(win, 'number'),
+      relativenumber = vim.api.nvim_win_get_option(win, 'relativenumber'),
+    }
   end
+  return win_settings
 end
 
 local function maximize_on()
-  -- Reset option(s) for not maximized window(s)
-  -- Except current window
-  local win_options = { signcolumn = 'no', relativenumber = false }
-  for winnr, _ in pairs(vim.t.mx_win_settings) do
-    local winnr = tonumber(winnr, 10)
-    if fn.win_getid() ~= winnr then
-      for name, value in pairs(win_options) do
-        api.nvim_win_set_option(winnr, name, value)
-      end
+  local cur_win = vim.fn.win_getid()
+  for win, _ in pairs(vim.t.mx_win_settings) do
+    local winnr = tonumber(win, 10)
+    if cur_win ~= winnr then
+      disable_sidebar_features(winnr)
     end
   end
 end
@@ -27,9 +38,9 @@ local function maximize_off()
   -- Restore window(buffer) options before maximize
   for winnr, options in pairs(vim.t.mx_win_settings) do
     local winnr = tonumber(winnr, 10)
-    if api.nvim_win_is_valid(winnr) then
+    if vim.api.nvim_win_is_valid(winnr) then
       for name, value in pairs(options) do
-        api.nvim_win_set_option(winnr, name, value)
+        vim.api.nvim_win_set_option(winnr, name, value)
       end
     end
   end
@@ -47,28 +58,22 @@ end
 
 M.maximize = function()
   -- Do nothing if only one window
-  if fn.winnr('$') == 1 then
+  if vim.fn.winnr('$') == 1 then
+    set_maximized(false)
     return
   end
 
   vim.t.mx_sizes = vim.fn.winrestcmd()
   vim.cmd('vert resize | resize')
 
-  -- Store window options that will be disabled when maximize
-  local win_settings = {}
-  for _, win in ipairs(api.nvim_tabpage_list_wins(0)) do
-    win_settings[tostring(win)] = {
-      signcolumn = api.nvim_win_get_option(win, 'signcolumn'),
-      relativenumber = api.nvim_win_get_option(win, 'relativenumber'),
-    }
-  end
+  local win_settings = get_window_settings()
   vim.t.mx_win_settings = win_settings
 
-  if is_valid() then
+  if next(win_settings) then
     maximize_on()
-    vim.t.is_maximized = true
+    set_maximized(true)
   else
-    vim.t.is_maximized = false
+    set_maximized(false)
   end
 end
 
@@ -77,12 +82,12 @@ M.restore = function()
     vim.cmd(vim.t.mx_sizes)
   end
 
-  if is_valid() then
+  if next(vim.t.mx_win_settings) then
     maximize_off()
   end
 
+  set_maximized(false)
   vim.t.mx_win_settings = nil
-  vim.t.is_maximized = false
 end
 
 return M
