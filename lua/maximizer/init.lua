@@ -1,13 +1,11 @@
-local config = require('maximizer.config')
-local window = require('maximizer.window')
+local config = require("maximizer.config")
+local window = require("maximizer.window")
 
 local function load_autocmd()
-  vim.api.nvim_create_autocmd({ 'QuitPre', 'WinClosed' }, {
-    pattern = { '*' },
+  vim.api.nvim_create_autocmd({ "QuitPre", "WinClosed" }, {
+    pattern = { "*" },
     callback = function()
-      -- Restore when only one window in tabpage
-      local curwins = vim.api.nvim_tabpage_list_wins(0)
-      if vim.t.is_maximized and #curwins == 2 then
+      if vim.t.is_maximized then
         window.restore()
       end
     end,
